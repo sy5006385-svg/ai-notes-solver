@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Study Notes</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><b>📚 AI Study Notes</b><span>Learn from notes. Ask instantly.</span></div>
+  <label class="upload"><input id="pdfInput" type="file" accept="application/pdf" hidden>📄 Open PDF</label>
+</header>
+
+<main>
+<section class="viewer">
+  <div class="toolbar">
+    <button id="prev">←</button><span id="pageInfo">Upload a PDF to start</span><button id="next">→</button>
+    <span class="spacer"></span><button id="zoomOut">−</button><button id="zoomIn">+</button>
+  </div>
+
+  <div id="empty" class="empty"><h2>Your AI-powered notes</h2><p>Upload a PDF, select text, ask by voice, or upload a question image.</p></div>
+
+  <div id="pdfWrap" class="pdf hidden">
+    <canvas id="canvas"></canvas>
+    <div id="textLayer"></div>
+  </div>
+</section>
+
+<aside id="aiPanel" class="ai-panel">
+  <div class="panel-head"><div><h2>🤖 AI Tutor</h2><small id="status">Ready for your doubt</small></div><button id="clear">🗑</button></div>
+
+  <div id="selection" class="selection hidden"></div>
+  <div id="chat" class="chat"></div>
+
+  <div class="tools">
+    <button id="voiceBtn">🎤 Speak</button>
+    <label class="imageBtn">📸 Question Image<input id="imageInput" type="file" accept="image/*" hidden></label>
+    <button data-q="Summarize the important concepts from this page.">📝 Summary</button>
+    <button data-q="Create 5 MCQs from this topic with answers.">❓ 5 MCQs</button>
+  </div>
+
+  <form id="form">
+    <textarea id="question" placeholder="Ask your doubt..." rows="3"></textarea>
+    <button id="send">Send ➤</button>
+  </form>
+</aside>
+</main>
+
+<button id="floatingAI" class="floating">✨<span>Ask AI</span></button>
+<div id="selectionPopup" class="selection-popup hidden">
+  <button id="askSelected">✨ Ask AI about selected text</button>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
