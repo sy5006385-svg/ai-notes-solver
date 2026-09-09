@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "12mb" }));
-app.use(express.static("public"));
+app.use(express.static("."));
 
 const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
