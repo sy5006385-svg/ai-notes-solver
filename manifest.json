@@ -1,1 +1,10 @@
-
+{
+  "name": "AI Study Notes",
+  "short_name": "AI Notes",
+  "description": "AI-powered study notes and doubt solver",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5b5bf7",
+  "orientation": "portrait"
+}
