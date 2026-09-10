@@ -15,6 +15,46 @@ const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY
 });
 
+async function askGemini(prompt) {
+  const models = [
+    "gemini-3.8-flash",
+    "gemini-3.7-flash",
+    "gemini-3.6-flash"
+  ];
+
+  let lastError;
+
+  for (const model of models) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: prompt
+        });
+
+        return response.text;
+      } catch (err) {
+        lastError = err;
+
+        const message = err?.message || "";
+        const retryable =
+          message.includes("503") ||
+          message.includes("UNAVAILABLE") ||
+          message.includes("high demand") ||
+          message.includes("429");
+
+        if (!retryable) throw err;
+
+        await new Promise(resolve =>
+          setTimeout(resolve, 1000 * Math.pow(2, attempt))
+        );
+      }
+    }
+  }
+
+  throw lastError;
+}
+
 app.post("/api/ask", async (req, res) => {
   try {
     const {
@@ -29,7 +69,7 @@ You are a helpful AI study tutor.
 
 Reply in simple Hinglish by default.
 Explain concepts clearly and step-by-step.
-For numerical questions, show all calculation steps.
+For numerical questions, show calculation steps.
 
 Student question:
 ${question || "Explain the selected content."}
@@ -47,20 +87,15 @@ ${history
   .join("\n")}
 `;
 
-    const response = await ai.models.generateContent({
-      model: "gemini-3.8-flash",
-      contents: prompt
-    });
+    const answer = await askGemini(prompt);
 
-    res.json({
-      answer: response.text
-    });
+    res.json({ answer });
 
   } catch (err) {
     console.error(err);
 
     res.status(500).json({
-      error: err?.message || "Gemini request failed"
+      error: "AI temporarily busy. Please try again."
     });
   }
 });
